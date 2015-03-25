@@ -1,0 +1,97 @@
+.room {
+    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+    padding: 1rem;
+}
+
+.room .roomName {
+    font-weight: bold;
+    font-size: larger;
+    margin-bottom: .5rem;
+}
+
+.room .roomDesc {
+    margin-bottom: 1rem;
+}
+
+.room .exits {
+    font-weight: bold;
+}
+
+.room .exits .label {
+    font-weight: normal;
+}
+
+#mainRoom {
+    float: left;
+    width: 40%;
+    margin: auto;
+    font-size: 1.2rem;
+    box-shadow: 0 0 10px;
+}
+
+.playerList {
+    margin-top: .5rem;
+    font-weight: 300;
+    color: #777;
+}
+
+#northRoom {
+    width: 40%;
+    margin: auto;
+    font-size: .8rem;
+    opacity: .3;
+    border-left: 1px dashed black;
+    border-right: 1px dashed black;
+    min-height: 10rem;
+}
+
+#southRoom {
+    clear: left;
+    width: 40%;
+    margin: auto;
+    font-size: .8rem;
+    opacity: .3;
+    border-left: 1px dashed black;
+    border-right: 1px dashed black;
+    min-height: 10rem;
+}
+
+#eastRoom {
+    padding-top: 2rem;
+    float: right;
+    width: 30%;
+    margin: auto;
+    font-size: .8rem;
+    opacity: .3;
+    border-top: 1px dashed black;
+    border-bottom: 1px dashed black;
+    min-height: 15rem;
+}
+
+#westRoom {
+    padding-top: 2rem;
+    float: left;
+    width: 30%;
+    margin: auto;
+    font-size: .8rem;
+    opacity: .3;
+    border-top: 1px dashed black;
+    border-bottom: 1px dashed black;
+    min-height: 15rem;
+}
+
+#prompt {
+    width: 60%;
+    margin: auto;
+    margin-top: 2rem;
+}
+
+#prompt input {
+    width: 100%;
+    height: 1.2rem;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid grey;
+    padding: .2rem;
+}

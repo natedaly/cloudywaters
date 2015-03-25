@@ -1,0 +1,58 @@
+<head>
+  <title>CloudyWaters</title>
+</head>
+
+<body>
+  {{> loginButtons}}
+  {{#if currentUser}}
+
+  <div id="northRoom">
+    {{> room northRoom}}
+  </div>
+
+  <div id="westRoom">
+    {{> room westRoom}}
+  </div>
+
+  <div id="mainRoom">
+    {{> room mainRoom}}
+  </div>
+
+  <div id="eastRoom">
+    {{> room eastRoom}}
+  </div>
+
+  <div id="southRoom">
+    {{> room southRoom}}
+  </div>
+  
+  <form id="prompt">
+    <input type="text" name="command" placeholder="Enter a command" autofocus/>
+  </form>
+  {{/if}}
+</body>
+
+<template name="room">
+  <div class="room">
+    <div class="roomName">
+      {{name}}
+    </div>
+    <div class="roomDesc">
+      {{desc}}
+    </div>
+    <div class="exits">
+      {{#if hasExits}}
+        <span class="label">Exits: </span>
+      {{/if}}
+      {{#if north}}North{{/if}}
+      {{#if south}}South{{/if}}
+      {{#if east}}East{{/if}}
+      {{#if west}}West{{/if}}
+    </div>
+    <div class="playerList">
+      {{#each playerList}}
+        <div>{{this}} is standing here.</div>
+      {{/each}}
+    </div>
+  </div>
+</template>
