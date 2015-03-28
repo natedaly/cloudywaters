@@ -7,7 +7,9 @@
   {{#if currentUser}}
 
   <div id="messages">
-    {{messages}}
+    {{#each messages}}
+      <div>{{playerName}} says '{{message}}'</div>
+    {{/each}}
   </div>
 
   <div id="northRoom">

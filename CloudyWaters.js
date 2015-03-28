@@ -43,7 +43,7 @@ if (Meteor.isClient) {
         },
 
         messages: function () {
-            return "Messages.";
+            return Messages.find();
         }
     });
     
@@ -97,7 +97,7 @@ if (Meteor.isClient) {
             console.log("args = '" + args.join(' ') + "'");
 
             if (command === "say") {
-                Meteor.call("say", Session.get("mainRoom"), args.join(' '));
+                Meteor.call("say", Session.get("currentRoomId"), args.join(' '));
             }
             return false;
         }
@@ -143,9 +143,8 @@ if (Meteor.isServer) {
         return Rooms.find();
     });
 
-    Meteor.publish("messages", function () {
-        //return Messages.find({player: Meteor.user().username})
-        return null;
+    Meteor.publish("messages", function (roomId) {
+        return Messages.find({roomId: roomId});
     });
     
     Meteor.startup(function () {
@@ -225,10 +224,12 @@ Meteor.methods({
         }
     },
 
-    say: function (room, msg) {
-        room = Rooms.findOne(room._id);
-        _.each(_.without(room.players, Meteor.user().username), function (p) {
-            console.log("  show " + p);
+    say: function (roomId, message) {
+        Messages.insert({
+            roomId: roomId,
+            playerName: Meteor.user().username,
+            message: message
         });
     }
+
 });
