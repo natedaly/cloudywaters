@@ -6,6 +6,10 @@
   {{> loginButtons}}
   {{#if currentUser}}
 
+  <div id="messages">
+    {{messages}}
+  </div>
+
   <div id="northRoom">
     {{> room northRoom}}
   </div>
@@ -14,8 +18,8 @@
     {{> room westRoom}}
   </div>
 
-  <div id="mainRoom">
-    {{> room mainRoom}}
+  <div id="currentRoom">
+    {{> room currentRoom}}
   </div>
 
   <div id="eastRoom">
@@ -29,6 +33,7 @@
   <form id="prompt">
     <input type="text" name="command" placeholder="Enter a command" autofocus/>
   </form>
+
   {{/if}}
 </body>
 

@@ -234,11 +234,6 @@
       "path": "packages/accounts-ui.js"
     },
     {
-      "sourceMap": "packages/lepozepo_streams.js.map",
-      "sourceMapRoot": "packages",
-      "path": "packages/lepozepo_streams.js"
-    },
-    {
       "sourceMap": "packages/session.js.map",
       "sourceMapRoot": "packages",
       "path": "packages/session.js"

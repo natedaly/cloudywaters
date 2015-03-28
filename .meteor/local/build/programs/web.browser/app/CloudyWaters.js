@@ -1,63 +1,53 @@
 (function(){
 var Rooms = new Mongo.Collection("rooms");
+var Messages = new Mongo.Collection("messages");
 
 if (Meteor.isClient) {
 
     Template.body.helpers({
-        mainRoom: function () {
-            var mainRoom = Session.get("mainRoom");
-            if (mainRoom) {
-                return Rooms.findOne(mainRoom._id);
-            }
-            return null;
+
+        currentRoom: function () {
+            return Rooms.findOne(Session.get("currentRoomId"));
         },
-        
+
         northRoom: function () {
-            var mainRoom = Session.get("mainRoom");
-            if (mainRoom && mainRoom.north) {
-                return Rooms.findOne(Session.get("mainRoom").north);
+            var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
+            if (currentRoom && currentRoom.north) {
+                return Rooms.findOne(currentRoom.north);
             }
             return null;
         },
 
         southRoom: function () {
-            var mainRoom = Session.get("mainRoom");
-            if (mainRoom && mainRoom.south) {
-                return Rooms.findOne(Session.get("mainRoom").south);
+            var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
+            if (currentRoom && currentRoom.south) {
+                return Rooms.findOne(currentRoom.south);
             }
             return null;
         },
 
         eastRoom: function () {
-            var mainRoom = Session.get("mainRoom");
-            if (mainRoom && mainRoom.east) {
-                return Rooms.findOne(Session.get("mainRoom").east);
+            var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
+            if (currentRoom && currentRoom.east) {
+                return Rooms.findOne(currentRoom.east);
             }
             return null;
         },
 
         westRoom: function () {
-            var mainRoom = Session.get("mainRoom");
-            if (mainRoom && mainRoom.west) {
-                return Rooms.findOne(Session.get("mainRoom").west);
+            var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
+            if (currentRoom && currentRoom.west) {
+                return Rooms.findOne(currentRoom.west);
             }
             return null;
         },
 
-        playerList: function () {
-            var mainRoom = Session.get("mainRoom")
-            if (mainRoom) {
-                return Rooms.findOne(mainRoom._id).players.join();
-            }
-            return "Oddly enough, you are nowhere!";
+        messages: function () {
+            return "Messages.";
         }
     });
     
     Template.body.events({
-        "click #mainRoom": function (event) {
-            // Do nothing.
-        },
-        
         "input #prompt": function (event) {
             var value = event.target.value;
 
@@ -66,34 +56,34 @@ if (Meteor.isClient) {
             }
 
             if (value === "N") {
-                var northRoom = Rooms.findOne(Session.get("mainRoom").north);
-                if (northRoom) {
-                    Meteor.call("move", Session.get("mainRoom"), northRoom);
-                    Session.set("mainRoom", Rooms.findOne(northRoom._id));
+                var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
+                if (currentRoom.north) {
+                    Meteor.call("move", currentRoom._id, currentRoom.north);
+                    Session.set("currentRoomId", Rooms.findOne(currentRoom.north));
                 }
             }
 
             if (value === "S") {
-                var southRoom = Rooms.findOne(Session.get("mainRoom").south);
-                if (southRoom) {
-                    Meteor.call("move", Session.get("mainRoom"), southRoom);
-                    Session.set("mainRoom", Rooms.findOne(southRoom._id));
+                var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
+                if (currentRoom.south) {
+                    Meteor.call("move", currentRoom._id, currentRoom.south);
+                    Session.set("currentRoomId", Rooms.findOne(currentRoom.south));
                 }
             }
 
             if (value === "E") {
-                var eastRoom = Rooms.findOne(Session.get("mainRoom").east);
-                if (eastRoom) {
-                    Meteor.call("move", Session.get("mainRoom"), eastRoom);
-                    Session.set("mainRoom", Rooms.findOne(eastRoom._id));
+                var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
+                if (currentRoom.east) {
+                    Meteor.call("move", currentRoom._id, currentRoom.east);
+                    Session.set("currentRoomId", Rooms.findOne(currentRoom.east));
                 }
             }
 
             if (value === "W") {
-                var westRoom = Rooms.findOne(Session.get("mainRoom").west);
-                if (westRoom) {
-                    Meteor.call("move", Session.get("mainRoom"), westRoom);
-                    Session.set("mainRoom", Rooms.findOne(westRoom._id));
+                var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
+                if (currentRoom.west) {
+                    Meteor.call("move", currentRoom._id, currentRoom.west);
+                    Session.set("currentRoomId", Rooms.findOne(currentRoom.west));
                 }
             }
         },
@@ -105,6 +95,10 @@ if (Meteor.isClient) {
             var args = _.rest(input);
             console.log("command = '" + command + "'");
             console.log("args = '" + args.join(' ') + "'");
+
+            if (command === "say") {
+                Meteor.call("say", Session.get("mainRoom"), args.join(' '));
+            }
             return false;
         }
     });
@@ -115,28 +109,29 @@ if (Meteor.isClient) {
         },
 
         playerList: function () {
-            var mainRoom = Session.get("mainRoom")
-            if (mainRoom && this._id === mainRoom._id) {
-                return _.without(Rooms.findOne(mainRoom._id).players, Meteor.user().username);
+            var currentRoomId = Session.get("currentRoomId");
+            if (this._id === currentRoomId) {
+                return _.without(Rooms.findOne(currentRoomId).players, Meteor.user().username);
             }
             return null;
         }
 
     });
     
-    Template.room.events({
-        
-    });   
-
     Accounts.ui.config({
         passwordSignupFields: "USERNAME_ONLY"
     });
 
     Accounts.onLogin(function () {
+
         Meteor.subscribe("rooms", function () {
-            var mainRoom = Rooms.findOne({name: "Market Square"});
-            Session.set("mainRoom", mainRoom);
-            Meteor.call("addPlayerToRoom", mainRoom);
+            var currentRoom = Rooms.findOne({name: "Market Square"});
+            Session.set("currentRoomId", currentRoom._id);
+            Meteor.call("addPlayerToRoom", currentRoom._id);
+        });
+
+        Tracker.autorun(function () {
+            Meteor.subscribe("messages", Session.get("currentRoomId"));
         });
     });
 }
@@ -146,6 +141,11 @@ if (Meteor.isServer) {
     
     Meteor.publish("rooms", function () {
         return Rooms.find();
+    });
+
+    Meteor.publish("messages", function () {
+        //return Messages.find({player: Meteor.user().username})
+        return null;
     });
     
     Meteor.startup(function () {
@@ -204,25 +204,32 @@ Meteor.methods({
         return room;
     },
 
-    addPlayerToRoom: function (room) {
-        room = Rooms.findOne(room._id);
+    addPlayerToRoom: function (roomId) {
+        var room = Rooms.findOne(roomId);
         var playerName = Meteor.user().username;
         if (! _.contains(room.players, playerName)) {
-            Rooms.update(room._id, {$set: {players: room.players.concat(playerName)}});
+            Rooms.update(roomId, {$set: {players: room.players.concat(playerName)}});
         }
     },
 
-    move: function (fromRoom, toRoom) {
-        fromRoom = Rooms.findOne(fromRoom._id);
-        toRoom = Rooms.findOne(toRoom._id);
+    move: function (fromRoomId, toRoomId) {
+        var fromRoom = Rooms.findOne(fromRoomId);
+        var toRoom = Rooms.findOne(toRoomId);
         var playerName = Meteor.user().username;
         console.log("Move " + playerName + " from " + fromRoom.name + " to " + toRoom.name);
         if (_.contains(fromRoom.players, playerName)) {
-            Rooms.update(fromRoom._id, {$set: {players: _.without(fromRoom.players, playerName)}});
+            Rooms.update(fromRoomId, {$set: {players: _.without(fromRoom.players, playerName)}});
         }
         if (! _.contains(toRoom.players, playerName)) {
-            Rooms.update(toRoom._id, {$set: {players: toRoom.players.concat(playerName)}});
+            Rooms.update(toRoomId, {$set: {players: toRoom.players.concat(playerName)}});
         }
+    },
+
+    say: function (room, msg) {
+        room = Rooms.findOne(room._id);
+        _.each(_.without(room.players, Meteor.user().username), function (p) {
+            console.log("  show " + p);
+        });
     }
 });
 

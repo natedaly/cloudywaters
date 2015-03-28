@@ -1,5 +1,5 @@
 {
-  "meteorRelease": "METEOR@1.0.4.2",
+  "meteorRelease": "METEOR@1.0.5",
   "clientPaths": {
     "web.browser": "../web.browser/program.json"
   }

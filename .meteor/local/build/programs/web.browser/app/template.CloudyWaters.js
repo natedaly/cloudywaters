@@ -5,6 +5,10 @@ Template.body.addContent((function() {
     return Spacebars.call(view.lookup("currentUser"));
   }, function() {
     return [ "\n\n  ", HTML.DIV({
+      id: "messages"
+    }, "\n    ", Blaze.View("lookup:messages", function() {
+      return Spacebars.mustache(view.lookup("messages"));
+    }), "\n  "), "\n\n  ", HTML.DIV({
       id: "northRoom"
     }, "\n    ", Blaze._TemplateWith(function() {
       return Spacebars.call(view.lookup("northRoom"));
@@ -17,9 +21,9 @@ Template.body.addContent((function() {
     }, function() {
       return Spacebars.include(view.lookupTemplate("room"));
     }), "\n  "), "\n\n  ", HTML.DIV({
-      id: "mainRoom"
+      id: "currentRoom"
     }, "\n    ", Blaze._TemplateWith(function() {
-      return Spacebars.call(view.lookup("mainRoom"));
+      return Spacebars.call(view.lookup("currentRoom"));
     }, function() {
       return Spacebars.include(view.lookupTemplate("room"));
     }), "\n  "), "\n\n  ", HTML.DIV({
@@ -41,7 +45,7 @@ Template.body.addContent((function() {
       name: "command",
       placeholder: "Enter a command",
       autofocus: ""
-    }), "\n  "), "\n  " ];
+    }), "\n  "), "\n\n  " ];
   }) ];
 }));
 Meteor.startup(Template.body.renderToDocument);
