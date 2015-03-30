@@ -3,35 +3,40 @@
 </head>
 
 <body>
-  {{> loginButtons}}
-  {{#if currentUser}}
-
-  <div id="messages">
-    {{#each messages}}
-      <div>{{playerName}} says '{{message}}'</div>
-    {{/each}}
+  <div id="login">
+    {{> loginButtons}}
   </div>
+
+  {{#if currentUser}}
 
   <div id="northRoom">
     {{> room northRoom}}
   </div>
 
-  <div id="westRoom">
-    {{> room westRoom}}
-  </div>
+  <div id="middleRow">
+    <div id="westRoom">
+      {{> room westRoom}}
+    </div>
 
-  <div id="currentRoom">
-    {{> room currentRoom}}
-  </div>
+    <div id="currentRoom">
+      {{> room currentRoom}}
+    </div>
 
-  <div id="eastRoom">
-    {{> room eastRoom}}
+    <div id="eastRoom">
+      {{> room eastRoom}}
+    </div>
   </div>
 
   <div id="southRoom">
     {{> room southRoom}}
   </div>
   
+  <div id="messages">
+    {{#each messages}}
+      <div><span class="playerName">{{playerName}}</span> says <span class="msg">'{{message}}'</span></div>
+    {{/each}}
+  </div>
+
   <form id="prompt">
     <input type="text" name="command" placeholder="Enter a command" autofocus/>
   </form>
