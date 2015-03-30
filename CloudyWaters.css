@@ -37,6 +37,7 @@
     opacity: .3;
     border-left: 1px dashed black;
     border-right: 1px dashed black;
+    overflow: hidden;
 }
 
 #middleRow {
@@ -89,6 +90,7 @@
     opacity: .3;
     border-left: 1px dashed black;
     border-right: 1px dashed black;
+    overflow: hidden;
 }
 
 #prompt {
