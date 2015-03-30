@@ -1,48 +1,109 @@
 <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head;
+       any other head content must come *after* these tags -->
   <title>CloudyWaters</title>
+  
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
 </head>
 
+
+
 <body>
-  <div id="login">
-    {{> loginButtons}}
-  </div>
 
-  {{#if currentUser}}
+{{#if currentUser}}
 
-  <div id="northRoom">
-    {{> room northRoom}}
-  </div>
-
-  <div id="middleRow">
-    <div id="westRoom">
-      {{> room westRoom}}
+  <div class="container">
+  
+    <div class="row">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <div id="login">
+          {{> loginButtons}}
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <div id="northRoom">
+          {{> room northRoom}}
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
     </div>
 
-    <div id="currentRoom">
-      {{> room currentRoom}}
+    <div class="row no-gutter">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+        <div id="westRoom">
+          {{> room westRoom}}
+        </div>
+      </div>
+  
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div id="currentRoom">
+          {{> room currentRoom}}
+        </div>
+      </div>
+  
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+        <div id="eastRoom">
+          {{> room eastRoom}}
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <div id="southRoom">
+          {{> room southRoom}}
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+    </div>
+    
+    <div class="row">
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+        <div id="messages">
+          {{#each messages}}
+            <div>
+              <span class="playerName">{{playerName}}</span> says <span class="msg">'{{message}}'</span>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
     </div>
 
-    <div id="eastRoom">
-      {{> room eastRoom}}
+    <div class="row">
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+        <form id="prompt">
+          <input type="text" name="command" placeholder="Enter a command" autofocus/>
+        </form>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
     </div>
-  </div>
 
-  <div id="southRoom">
-    {{> room southRoom}}
   </div>
   
-  <div id="messages">
-    {{#each messages}}
-      <div><span class="playerName">{{playerName}}</span> says <span class="msg">'{{message}}'</span></div>
-    {{/each}}
-  </div>
+{{/if}}
+  
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
 
-  <form id="prompt">
-    <input type="text" name="command" placeholder="Enter a command" autofocus/>
-  </form>
-
-  {{/if}}
 </body>
+
+
 
 <template name="room">
   <div class="room">
@@ -54,7 +115,7 @@
     </div>
     <div class="exits">
       {{#if hasExits}}
-        <span class="label">Exits: </span>
+        <span class="exitsLabel">Exits: </span>
       {{/if}}
       {{#if north}}North{{/if}}
       {{#if south}}South{{/if}}
