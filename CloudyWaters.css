@@ -48,7 +48,6 @@ table {
 
 .room {
     display: block;
-    height: 100%;
     font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
     padding: .5rem;
 }
@@ -62,8 +61,6 @@ table {
 .room .roomDesc {
     display: inline-block;
     margin-bottom: .5rem;
-    height: 45%;
-    overflow: hidden;
 }
 
 .room .exits {
