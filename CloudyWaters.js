@@ -51,14 +51,12 @@ if (Meteor.isClient) {
                 return Rooms.findOne(currentRoom.west);
             }
             return null;
-        },
-
-        messages: function () {
-            return Messages.find();
         }
+
     });
     
     Template.body.events({
+
         "input #prompt": function (event) {
             var value = event.target.value;
 
@@ -112,9 +110,11 @@ if (Meteor.isClient) {
             }
             return false;
         }
+
     });
     
     Template.room.helpers({
+
         hasExits: function () {
             return this.north || this.south || this.east || this.west;
         },
@@ -122,13 +122,27 @@ if (Meteor.isClient) {
         playerList: function () {
             var currentRoomId = Session.get("currentRoomId");
             if (this._id === currentRoomId) {
-                return _.without(Rooms.findOne(currentRoomId).players, Meteor.user().username);
+                var currentRoom = Rooms.findOne(currentRoomId);
+                if (currentRoom) {
+                    return _.without(currentRoom.players, Meteor.user().username);
+                }
             }
             return null;
         }
 
     });
     
+    Template.message.rendered = function() {
+        $msgDiv = $("#messages");
+        $msgDiv.scrollTop($msgDiv[0].scrollHeight);
+    };
+
+    Template.messageBox.helpers({
+        messages: function () {
+            return Messages.find();
+        }
+    });
+
     Accounts.ui.config({
         passwordSignupFields: "USERNAME_ONLY"
     });
@@ -207,9 +221,11 @@ Meteor.methods({
 
     addPlayerToRoom: function (roomId) {
         var room = Rooms.findOne(roomId);
-        var playerName = Meteor.user().username;
-        if (! _.contains(room.players, playerName)) {
-            Rooms.update(roomId, {$set: {players: room.players.concat(playerName)}});
+        if (room) {
+            var playerName = Meteor.user().username;
+            if (! _.contains(room.players, playerName)) {
+                Rooms.update(roomId, {$set: {players: room.players.concat(playerName)}});
+            }
         }
     },
 
