@@ -164,6 +164,10 @@ if (Meteor.isServer) {
     });
     
     Meteor.startup(function () {
+        // Reset the messages collection.
+        Messages.remove({});
+
+        // If there are no rooms, create an initial map for testing.
         if (Rooms.find().count() === 0) {
             var desc = "You are standing in a room. There's not much here, but there are a few things worth noting. First, the room seems to be slowly filling with smoke. Second, it stinks in here. Third, there is a road leading to the north. And fourth, there is another road leading to the south.";
             
