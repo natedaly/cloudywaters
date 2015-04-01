@@ -100,7 +100,7 @@ table {
 #currentRoom {
     min-height: 15rem;
     font-size: 1.2rem;
-    box-shadow: 0 0 10px;
+    box-shadow: 0 0 .5rem;
 }
 
 #eastRoom {
