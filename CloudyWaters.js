@@ -159,8 +159,8 @@ if (Meteor.isServer) {
         return Rooms.find();
     });
 
-    Meteor.publish("messages", function (roomId) {
-        return Messages.find({roomId: roomId});
+    Meteor.publish("messages", function () {
+        return Messages.find({playerId: this.userId});
     });
     
     Meteor.startup(function () {
@@ -212,46 +212,51 @@ if (Meteor.isServer) {
             Rooms.update(westId, {$set: {east: mainId}});
         }
     });
+
+    Meteor.methods({
+        
+        getStartingRoom: function () {
+            var room = Rooms.findOne({name: "Market Square"});
+            return room;
+        },
+        
+        addPlayerToRoom: function (roomId) {
+            var room = Rooms.findOne(roomId);
+            if (room) {
+                var playerName = Meteor.user().username;
+                if (! _.contains(room.players, playerName)) {
+                    Rooms.update(roomId, {$set: {players: room.players.concat(playerName)}});
+                }
+            }
+        },
+        
+        move: function (fromRoomId, toRoomId) {
+            var fromRoom = Rooms.findOne(fromRoomId);
+            var toRoom = Rooms.findOne(toRoomId);
+            var playerName = Meteor.user().username;
+            console.log("Move " + playerName + " from " + fromRoom.name + " to " + toRoom.name);
+            if (_.contains(fromRoom.players, playerName)) {
+                Rooms.update(fromRoomId, {$set: {players: _.without(fromRoom.players, playerName)}});
+            }
+            if (! _.contains(toRoom.players, playerName)) {
+                Rooms.update(toRoomId, {$set: {players: toRoom.players.concat(playerName)}});
+            }
+        },
+        
+        say: function (roomId, message) {
+            var room = Rooms.findOne(roomId);
+            var playerName = Meteor.user().username;
+            
+            _.each(room.players, function(player) {
+                Messages.insert({
+                    playerId: Meteor.users.findOne({username: player})._id,
+                    playerName: (playerName !== player ? playerName : null),
+                    message: message
+                });
+            });
+        }
+        
+    });
     
 }
 
-
-Meteor.methods({
-
-    getStartingRoom: function () {
-        var room = Rooms.findOne({name: "Market Square"});
-        return room;
-    },
-
-    addPlayerToRoom: function (roomId) {
-        var room = Rooms.findOne(roomId);
-        if (room) {
-            var playerName = Meteor.user().username;
-            if (! _.contains(room.players, playerName)) {
-                Rooms.update(roomId, {$set: {players: room.players.concat(playerName)}});
-            }
-        }
-    },
-
-    move: function (fromRoomId, toRoomId) {
-        var fromRoom = Rooms.findOne(fromRoomId);
-        var toRoom = Rooms.findOne(toRoomId);
-        var playerName = Meteor.user().username;
-        console.log("Move " + playerName + " from " + fromRoom.name + " to " + toRoom.name);
-        if (_.contains(fromRoom.players, playerName)) {
-            Rooms.update(fromRoomId, {$set: {players: _.without(fromRoom.players, playerName)}});
-        }
-        if (! _.contains(toRoom.players, playerName)) {
-            Rooms.update(toRoomId, {$set: {players: toRoom.players.concat(playerName)}});
-        }
-    },
-
-    say: function (roomId, message) {
-        Messages.insert({
-            roomId: roomId,
-            playerName: Meteor.user().username,
-            message: message
-        });
-    }
-
-});

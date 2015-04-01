@@ -114,7 +114,12 @@
 
 <template name="message">
   <div>
-    <span class="playerName">{{playerName}}</span> says <span class="msg">'{{message}}'</span>
+    {{#if playerName}}
+      <span class="playerName">{{playerName}}</span> says 
+    {{else}}
+      <span class="playerNameSelf">You</span> say
+    {{/if}}
+    <span class="msg">'{{message}}'</span>
   </div>
 </template>
 
