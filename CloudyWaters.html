@@ -71,7 +71,9 @@
     <div class="row">
       <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
       <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-        {{> messageBox}}
+        <form id="prompt">
+          <input type="text" name="command" placeholder="Enter a command" autofocus/>
+        </form>
       </div>
       <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
     </div>
@@ -79,9 +81,7 @@
     <div class="row">
       <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
       <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-        <form id="prompt">
-          <input type="text" name="command" placeholder="Enter a command" autofocus/>
-        </form>
+        {{> messageBox}}
       </div>
       <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
     </div>
