@@ -91,8 +91,9 @@ table {
     margin-top: 15%;
     font-size: .7rem;
     opacity: .3;
-    border-top: 1px dashed black;
-    border-bottom: 1px dashed black;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid black;
+    box-shadow: 0 .3rem 1rem -.3rem #333;
 }
 
 #currentRoom {
@@ -106,8 +107,9 @@ table {
     margin-top: 15%;
     font-size: .7rem;
     opacity: .3;
-    border-top: 1px dashed black;
-    border-bottom: 1px dashed black;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid black;
+    box-shadow: 0 .3rem 1rem -.3rem #333;
 }
 
 #southRoom {
