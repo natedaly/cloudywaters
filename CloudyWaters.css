@@ -87,7 +87,7 @@ table {
 }
 
 #westRoom {
-    min-height: 8rem;
+    min-height: 10rem;
     margin-top: 15%;
     font-size: .7rem;
     opacity: .3;
@@ -102,7 +102,7 @@ table {
 }
 
 #eastRoom {
-    min-height: 8rem;
+    min-height: 10rem;
     margin-top: 15%;
     font-size: .7rem;
     opacity: .3;
