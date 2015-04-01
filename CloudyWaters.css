@@ -122,10 +122,11 @@ table {
     margin-top: 1rem;
     height: 1.2rem;
     border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 1px solid grey;
+    border-left: .1rem solid #CCC;
+    border-right: .1rem solid #CCC;
     padding: .2rem;
+    box-shadow: 0 .3rem 1rem -.3rem #333;
+    outline: none;
 }
 
 #messages {
