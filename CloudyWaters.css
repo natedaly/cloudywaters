@@ -78,6 +78,7 @@ table {
 }
 
 #northRoom {
+    min-height: 8rem;
     font-size: .7rem;
     opacity: .3;
     border-left: 1px dashed black;
@@ -94,6 +95,7 @@ table {
 }
 
 #currentRoom {
+    min-height: 15rem;
     font-size: 1.2rem;
     box-shadow: 0 0 10px;
 }
@@ -107,6 +109,7 @@ table {
 }
 
 #southRoom {
+    min-height: 8rem;
     font-size: .7rem;
     opacity: .3;
     border-left: 1px dashed black;
@@ -151,7 +154,6 @@ table {
 #login {
     float: left;
 }
-
 
 /* My Bootstrap Customizations */
 
