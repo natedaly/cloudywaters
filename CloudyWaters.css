@@ -81,8 +81,9 @@ table {
     min-height: 8rem;
     font-size: .7rem;
     opacity: .3;
-    border-left: 1px dashed black;
-    border-right: 1px dashed black;
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+    box-shadow: .3rem 0 1rem -.3rem #333, -.3rem 0 1rem -.3rem #333;
     overflow: hidden;
 }
 
@@ -116,8 +117,9 @@ table {
     min-height: 8rem;
     font-size: .7rem;
     opacity: .3;
-    border-left: 1px dashed black;
-    border-right: 1px dashed black;
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+    box-shadow: .3rem 0 1rem -.3rem #333, -.3rem 0 1rem -.3rem #333;
     overflow: hidden;
 }
 
