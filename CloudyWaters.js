@@ -6,8 +6,11 @@ if (Meteor.isClient) {
 
     Tracker.autorun(function() {
         Meteor.subscribe("rooms", function() {
-            var currentRoom = Rooms.findOne({name: "Market Square"});
-            Session.set("currentRoomId", currentRoom._id);
+            if (! Session.get("currentRoomId")) {
+                var currentRoom = Rooms.findOne({name: "Market Square"});
+                Meteor.call("addPlayerToRoom", currentRoom._id);
+                Session.setPersistent("currentRoomId", currentRoom._id);
+            }
         });
     });
     
@@ -68,7 +71,7 @@ if (Meteor.isClient) {
                 var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
                 if (currentRoom.north) {
                     Meteor.call("move", currentRoom._id, currentRoom.north);
-                    Session.set("currentRoomId", currentRoom.north);
+                    Session.setPersistent("currentRoomId", currentRoom.north);
                 }
             }
 
@@ -76,7 +79,7 @@ if (Meteor.isClient) {
                 var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
                 if (currentRoom.south) {
                     Meteor.call("move", currentRoom._id, currentRoom.south);
-                    Session.set("currentRoomId", currentRoom.south);
+                    Session.setPersistent("currentRoomId", currentRoom.south);
                 }
             }
 
@@ -84,7 +87,7 @@ if (Meteor.isClient) {
                 var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
                 if (currentRoom.east) {
                     Meteor.call("move", currentRoom._id, currentRoom.east);
-                    Session.set("currentRoomId", currentRoom.east);
+                    Session.setPersistent("currentRoomId", currentRoom.east);
                 }
             }
 
@@ -92,7 +95,7 @@ if (Meteor.isClient) {
                 var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
                 if (currentRoom.west) {
                     Meteor.call("move", currentRoom._id, currentRoom.west);
-                    Session.set("currentRoomId", currentRoom.west);
+                    Session.setPersistent("currentRoomId", currentRoom.west);
                 }
             }
         },
@@ -148,13 +151,18 @@ if (Meteor.isClient) {
     });
 
     Accounts.onLogin(function() {
-        Meteor.call("addPlayerToRoom", Session.get("currentRoomId"));
+        if (! Session.get("currentRoomId")) {
+            var currentRoom = Rooms.findOne({name: "Market Square"});
+            Meteor.call("addPlayerToRoom", currentRoom._id);
+            Session.setPersistent("currentRoomId", currentRoom._id);
+        }
     });
 
     // Custom logout actions.
     var _logout = Meteor.logout;
     Meteor.logout = function customLogout() {
         Meteor.call("playerLogout");
+        Session.clear();
         _logout.apply(Meteor, arguments);
     }
 }
