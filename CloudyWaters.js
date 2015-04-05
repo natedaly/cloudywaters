@@ -17,11 +17,11 @@ if (Meteor.isClient) {
 
     Template.body.helpers({
 
-        currentRoom: function () {
+        currentRoom: function() {
             return Rooms.findOne(Session.get("currentRoomId"));
         },
 
-        northRoom: function () {
+        northRoom: function() {
             var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
             if (currentRoom && currentRoom.north) {
                 return Rooms.findOne(currentRoom.north);
@@ -29,7 +29,7 @@ if (Meteor.isClient) {
             return null;
         },
 
-        southRoom: function () {
+        southRoom: function() {
             var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
             if (currentRoom && currentRoom.south) {
                 return Rooms.findOne(currentRoom.south);
@@ -37,7 +37,7 @@ if (Meteor.isClient) {
             return null;
         },
 
-        eastRoom: function () {
+        eastRoom: function() {
             var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
             if (currentRoom && currentRoom.east) {
                 return Rooms.findOne(currentRoom.east);
@@ -45,7 +45,7 @@ if (Meteor.isClient) {
             return null;
         },
 
-        westRoom: function () {
+        westRoom: function() {
             var currentRoom = Rooms.findOne(Session.get("currentRoomId"));
             if (currentRoom && currentRoom.west) {
                 return Rooms.findOne(currentRoom.west);
@@ -57,7 +57,7 @@ if (Meteor.isClient) {
     
     Template.body.events({
 
-        "input #prompt": function (event) {
+        "input #prompt": function(event) {
             var value = event.target.value;
 
             if (_.contains(['N','S','E','W'], value)) {
@@ -97,7 +97,7 @@ if (Meteor.isClient) {
             }
         },
 
-        "submit #prompt": function (event) {
+        "submit #prompt": function(event) {
             var input = event.target.command.value.split(' ')
             event.target.command.value = '';
             var command = _.first(input);
@@ -115,11 +115,11 @@ if (Meteor.isClient) {
     
     Template.room.helpers({
 
-        hasExits: function () {
+        hasExits: function() {
             return this.north || this.south || this.east || this.west;
         },
 
-        playerList: function () {
+        playerList: function() {
             var currentRoomId = Session.get("currentRoomId");
             if (this._id === currentRoomId) {
                 var currentRoom = Rooms.findOne(currentRoomId);
@@ -138,7 +138,7 @@ if (Meteor.isClient) {
     };
 
     Template.messageBox.helpers({
-        messages: function () {
+        messages: function() {
             return Messages.find();
         }
     });
@@ -147,7 +147,7 @@ if (Meteor.isClient) {
         passwordSignupFields: "USERNAME_ONLY"
     });
 
-    Accounts.onLogin(function () {
+    Accounts.onLogin(function() {
         Meteor.call("addPlayerToRoom", Session.get("currentRoomId"));
     });
 
@@ -162,15 +162,15 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
     
-    Meteor.publish("rooms", function () {
+    Meteor.publish("rooms", function() {
         return Rooms.find();
     });
 
-    Meteor.publish("messages", function () {
+    Meteor.publish("messages", function() {
         return Messages.find({playerId: this.userId});
     });
     
-    Meteor.startup(function () {
+    Meteor.startup(function() {
         // Reset the messages collection.
         Messages.remove({});
 
@@ -222,12 +222,12 @@ if (Meteor.isServer) {
 
     Meteor.methods({
         
-        getStartingRoom: function () {
+        getStartingRoom: function() {
             var room = Rooms.findOne({name: "Market Square"});
             return room;
         },
         
-        addPlayerToRoom: function (roomId) {
+        addPlayerToRoom: function(roomId) {
             var room = Rooms.findOne(roomId);
             if (room) {
                 var playerName = Meteor.user().username;
@@ -237,7 +237,7 @@ if (Meteor.isServer) {
             }
         },
         
-        move: function (fromRoomId, toRoomId) {
+        move: function(fromRoomId, toRoomId) {
             var fromRoom = Rooms.findOne(fromRoomId);
             var toRoom = Rooms.findOne(toRoomId);
             var playerName = Meteor.user().username;
@@ -250,7 +250,7 @@ if (Meteor.isServer) {
             }
         },
         
-        say: function (roomId, message) {
+        say: function(roomId, message) {
             var room = Rooms.findOne(roomId);
             var playerName = Meteor.user().username;
             
@@ -266,12 +266,9 @@ if (Meteor.isServer) {
         playerLogout: function() {
             var playerName = Meteor.user().username;
             console.log("Logging out " + playerName);
-            _.each(Rooms.find({players: playerName}).fetch(), function (room) {
+            _.each(Rooms.find({players: playerName}).fetch(), function(room) {
                 if (_.contains(room.players, playerName)) {
-                    Rooms.update(room._id,
-                                 {$set: {players: _.without(room.players, playerName)}
-                                 }
-                                );
+                    Rooms.update(room._id, { $set: {players: _.without(room.players, playerName)} });
                 }
             });
         }
