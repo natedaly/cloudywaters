@@ -150,6 +150,13 @@ if (Meteor.isClient) {
     Accounts.onLogin(function () {
         Meteor.call("addPlayerToRoom", Session.get("currentRoomId"));
     });
+
+    // Custom logout actions.
+    var _logout = Meteor.logout;
+    Meteor.logout = function customLogout() {
+        Meteor.call("playerLogout");
+        _logout.apply(Meteor, arguments);
+    }
 }
 
 
@@ -253,6 +260,19 @@ if (Meteor.isServer) {
                     playerName: (playerName !== player ? playerName : null),
                     message: message
                 });
+            });
+        },
+
+        playerLogout: function() {
+            var playerName = Meteor.user().username;
+            console.log("Logging out " + playerName);
+            _.each(Rooms.find({players: playerName}).fetch(), function (room) {
+                if (_.contains(room.players, playerName)) {
+                    Rooms.update(room._id,
+                                 {$set: {players: _.without(room.players, playerName)}
+                                 }
+                                );
+                }
             });
         }
         
