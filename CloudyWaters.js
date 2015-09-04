@@ -1,8 +1,11 @@
 
 var Rooms = new Mongo.Collection("rooms");
+var Mobs = new Mongo.Collection("mobs");
 var Messages = new Mongo.Collection("messages");
 
 if (Meteor.isClient) {
+
+    Meteor.subscribe("mobs");
 
     Tracker.autorun(function() {
         Meteor.subscribe("rooms", function() {
@@ -122,6 +125,10 @@ if (Meteor.isClient) {
             return this.north || this.south || this.east || this.west;
         },
 
+        mobList: function() {
+            return Mobs.find({room: this._id});
+        },
+
         playerList: function() {
             var currentRoomId = Session.get("currentRoomId");
             if (this._id === currentRoomId) {
@@ -172,6 +179,10 @@ if (Meteor.isServer) {
     
     Meteor.publish("rooms", function() {
         return Rooms.find();
+    });
+
+    Meteor.publish("mobs", function() {
+        return Mobs.find();
     });
 
     Meteor.publish("messages", function() {
@@ -225,6 +236,15 @@ if (Meteor.isServer) {
             Rooms.update(southId, {$set: {north: mainId}});
             Rooms.update(eastId, {$set: {west: mainId}});
             Rooms.update(westId, {$set: {east: mainId}});
+        }
+
+        // If there are no mobs, create an initial population for testing.
+        if (Mobs.find().count() === 0) {
+            Mobs.insert({
+                name: "Sauron",
+                hitpoints: 1000,
+                room: Rooms.findOne({name: "Market Square"})._id
+            });
         }
     });
 

@@ -71,6 +71,12 @@ table {
     font-weight: normal;
 }
 
+.mobList {
+    margin-top: .5rem;
+    font-weight: 500;
+    color: #055184;
+}
+
 .playerList {
     margin-top: .5rem;
     font-weight: 300;
