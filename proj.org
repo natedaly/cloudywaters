@@ -1,11 +1,14 @@
 #+Title: Cloudy Waters Project ToDo
 
+* TODO style the login
+* TODO split code into server and client code
 * TODO set up git repository on natedaly.net and check in current version
-* TODO make sure all packages are up to date
-* TODO implement mobs that just appear as a description in a room
 * TODO implement look command to look at mobs
 * TODO implement an exit command for players
-* TODO style the login
+* TODO implement tab completion
 * TODO separate the code into modules
   Start with at least a utilities and a main module.
 
+
+* DONE <2015-09-04 Fri> implement mobs that just appear as a description in a room
+* DONE <2015-08-23 Sun> make sure all packages are up to date
