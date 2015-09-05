@@ -130,6 +130,8 @@ if (Meteor.isClient) {
         },
 
         playerList: function() {
+            return _.without(this.players, Meteor.user().username);
+            
             var currentRoomId = Session.get("currentRoomId");
             if (this._id === currentRoomId) {
                 var currentRoom = Rooms.findOne(currentRoomId);
