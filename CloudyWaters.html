@@ -35,7 +35,9 @@
           {{> room northRoom}}
         </div>
       </div>
-      <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3"></div>
+      <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3">
+        <input class="btn btn-primary" id="repop" type="button" value="Repop" />
+      </div>
     </div>
 
     <div class="row no-gutter">
@@ -86,6 +88,10 @@
       <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
     </div>
 
+    {{#if inCombat}}
+      {{> combatMsgBox}}
+    {{/if}}
+
   </div>
 
 {{else}}
@@ -114,12 +120,23 @@
 
 <template name="message">
   <div>
-    {{#if playerName}}
-      <span class="playerName">{{playerName}}</span> says 
-    {{else}}
-      <span class="playerNameSelf">You</span> say
-    {{/if}}
-    <span class="msg">'{{message}}'</span>
+    <span class="msg {{type}}">{{message}}</span>
+  </div>
+</template>
+
+
+<template name="combatMsgBox">
+  <div id="combatMsgBox">
+    {{#each combatMessages}}
+      {{> combatMessage}}
+    {{/each}}
+  </div>
+</template>
+
+
+<template name="combatMessage">
+  <div>
+    <span class="msg combat">{{message}}</span>
   </div>
 </template>
 

@@ -5,7 +5,13 @@ var Messages = new Mongo.Collection("messages");
 
 if (Meteor.isClient) {
 
-    Meteor.subscribe("mobs");
+    Tracker.autorun(function() {
+        Meteor.subscribe("mobs");
+    });
+
+    Tracker.autorun(function() {
+        Meteor.subscribe("userData");
+    });
 
     Tracker.autorun(function() {
         Meteor.subscribe("rooms", function() {
@@ -22,7 +28,7 @@ if (Meteor.isClient) {
     });
 
     Template.body.helpers({
-
+        
         currentRoom: function() {
             return Rooms.findOne(Session.get("currentRoomId"));
         },
@@ -57,8 +63,11 @@ if (Meteor.isClient) {
                 return Rooms.findOne(currentRoom.west);
             }
             return null;
-        }
+        },
 
+        inCombat: function() {
+            return Meteor.user().inCombat;
+        }
     });
     
     Template.body.events({
@@ -114,9 +123,17 @@ if (Meteor.isClient) {
             if (command === "say") {
                 Meteor.call("say", Session.get("currentRoomId"), args.join(' '));
             }
-            return false;
-        }
 
+            if (command === "kill") {
+                Meteor.call("kill", Session.get("currentRoomId"), args[0]);
+            }
+
+            return false;
+        },
+
+        'click #repop': function(event) {
+            Meteor.call('repop');
+        }
     });
     
     Template.room.helpers({
@@ -126,7 +143,7 @@ if (Meteor.isClient) {
         },
 
         mobList: function() {
-            return Mobs.find({room: this._id});
+            return Mobs.find({roomId: this._id});
         },
 
         playerList: function() {
@@ -143,7 +160,7 @@ if (Meteor.isClient) {
         }
 
     });
-    
+
     Template.message.rendered = function() {
         $msgDiv = $("#messages");
         $msgDiv.scrollTop($msgDiv[0].scrollHeight);
@@ -151,7 +168,18 @@ if (Meteor.isClient) {
 
     Template.messageBox.helpers({
         messages: function() {
-            return Messages.find();
+            return Messages.find({type: {$ne: "combat"}});
+        }
+    });
+
+    Template.combatMessage.rendered = function() {
+        $msgDiv = $("#combatMsgBox");
+        $msgDiv.scrollTop($msgDiv[0].scrollHeight);
+    };
+
+    Template.combatMsgBox.helpers({
+        combatMessages: function() {
+            return Messages.find({type: "combat"});
         }
     });
 
@@ -179,6 +207,15 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
     
+    Meteor.publish("userData", function () {
+        if (this.userId) {
+            return Meteor.users.find({_id: this.userId},
+                                     {fields: {'inCombat': 1}});
+        } else {
+            this.ready();
+        }
+    });
+
     Meteor.publish("rooms", function() {
         return Rooms.find();
     });
@@ -245,7 +282,7 @@ if (Meteor.isServer) {
             Mobs.insert({
                 name: "Sauron",
                 hitpoints: 1000,
-                room: Rooms.findOne({name: "Market Square"})._id
+                roomId: Rooms.findOne({name: "Market Square"})._id
             });
         }
     });
@@ -287,10 +324,74 @@ if (Meteor.isServer) {
             _.each(room.players, function(player) {
                 Messages.insert({
                     playerId: Meteor.users.findOne({username: player})._id,
-                    playerName: (playerName !== player ? playerName : null),
-                    message: message
+                    type: "say",
+                    message: (playerName === player ? "You say '" : playerName + " says '") + message + "'"
                 });
             });
+        },
+
+        kill: function(roomId, target) {
+            var room = Rooms.findOne(roomId);
+            var playerName = Meteor.user().username;
+            var playerId = function (player) {
+                return Meteor.users.findOne({username: player})._id;
+            };
+            var mob = Mobs.findOne({"name": {$regex: new RegExp(target, "i")}});
+            var roll = function (dice, faces, base) {
+                var roll = base;
+                _.times(dice, function () { roll += _.random(1, faces); });
+                return roll;
+            }
+            console.log(playerName + ' fighting ' + target);
+
+            if (mob && mob.roomId === roomId) {
+                var dam;
+                var hps = mob.hitpoints;                    
+            
+                // Enter combat
+                Meteor.users.update({ username: playerName }, { $set: { inCombat: true } });
+
+                var fight = Meteor.setInterval(function() {
+                    dam = roll(10, 10, 9);
+                    hps = hps - dam;
+                    Mobs.update(mob._id, {$set: {hitpoints: hps}});
+                    console.log(playerName + ' does ' + dam + ' hps of damage, leaving ' + target + ' at ' + hps + ' hps.');
+                    
+                    _.each(room.players, function(player) {
+                        Messages.insert({
+                            playerId: playerId(player),
+                            type: "combat",
+                            message: (playerName !== player ? playerName + " hits " : "You hit ") + mob.name + " pretty hard. [" +hps +"]"
+                        });
+                    });
+                    
+                    if (hps < 0) {
+                        Meteor.clearInterval(fight);
+                        Mobs.remove(mob._id);
+                        Messages.remove({ type: "combat" });
+                        // Exit combat
+                        Meteor.users.update({ username: playerName }, { $set: { inCombat: false } });
+                    }
+                }, 1000);
+
+                _.each(room.players, function(player) {
+                    Messages.insert({
+                        playerId: playerId(player),
+                        type: "info",
+                        message: (playerName !== player ? playerName + " kills " : "You kill ") + mob.name + "."
+                    });
+                });
+            }
+        },
+
+        repop: function() {
+            if (Mobs.find().count() === 0) {
+                Mobs.insert({
+                    name: "Sauron",
+                    hitpoints: 1000,
+                    roomId: Rooms.findOne({name: "Market Square"})._id
+                });
+            }
         },
 
         playerLogout: function() {
