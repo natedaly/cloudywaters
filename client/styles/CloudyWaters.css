@@ -84,8 +84,8 @@ table {
 }
 
 #northRoom {
-    min-height: 9rem;
-    max-height: 9rem;
+    min-height: 7rem;
+    max-height: 7rem;
     font-size: .7rem;
     opacity: .3;
     border-left: 1px solid grey;
@@ -103,14 +103,14 @@ table {
 }
 
 #westRoom {
-    min-height: 13rem;
+    min-height: 7rem;
     margin-top: 15%;
     font-size: .7rem;
     opacity: .3;
     border-top: 1px solid grey;
     border-bottom: 1px solid black;
     box-shadow: 0 .3rem 1rem -.3rem #333;
-    padding: 1.5rem;
+    padding: .5rem;
     line-height: .8rem;
     border-radius: .5rem;
 }
@@ -121,23 +121,23 @@ table {
 }
 
 #currentRoom {
-    min-height: 19rem;
+    min-height: 15rem;
     font-size: 1.2rem;
     box-shadow: 0 0 1rem;
-    padding: 1.5rem;
+    padding: 1rem;
     line-height: 1.5rem;
     border-radius: 1rem;
 }
 
 #eastRoom {
-    min-height: 13rem;
+    min-height: 7rem;
     margin-top: 15%;
     font-size: .7rem;
     opacity: .3;
     border-top: 1px solid grey;
     border-bottom: 1px solid black;
     box-shadow: 0 .3rem 1rem -.3rem #333;
-    padding: 1.5rem;
+    padding: .5rem;
     line-height: .9rem;
     border-radius: .5rem;
 }
@@ -148,8 +148,8 @@ table {
 }
 
 #southRoom {
-    min-height: 9rem;
-    max-height: 9rem;
+    min-height: 7rem;
+    max-height: 7rem;
     font-size: .7rem;
     opacity: .3;
     border-left: 1px solid grey;
@@ -167,7 +167,7 @@ table {
 }
 
 #noRoom {
-    min-height: 9rem;
+    min-height: 7rem;
 }
 
 #prompt input {
@@ -178,7 +178,7 @@ table {
     border-top: none;
     border-left: .1rem solid #CCC;
     border-right: .1rem solid #CCC;
-    padding: 1rem .5rem;
+    padding: 0 .5rem;
     box-shadow: 0 .3rem 1rem -.3rem #333;
     outline: none;
     border-radius: .5rem;
