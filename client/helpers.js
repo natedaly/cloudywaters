@@ -36,7 +36,8 @@ Template.body.helpers({
     },
 
     inCombat: function() {
-        return Meteor.user().inCombat;
+//        return Meteor.user().inCombat;
+        return false;
     }
 });
 
@@ -70,7 +71,8 @@ Template.message.rendered = function() {
 
 Template.messageBox.helpers({
     messages: function() {
-        return Messages.find({type: {$ne: "combat"}});
+//        return Messages.find({type: {$ne: "combat"}});
+        return Messages.find();
     }
 });
 

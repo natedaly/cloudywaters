@@ -78,7 +78,7 @@ Meteor.methods({
                 if (hps < 0) {
                     Meteor.clearInterval(fight);
                     Mobs.remove(mob._id);
-                    Messages.remove({ type: "combat" });
+//                    Messages.remove({ type: "combat" });
                     // Exit combat
                     Meteor.users.update({ username: playerName }, { $set: { inCombat: false } });
                 }

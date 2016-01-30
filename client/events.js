@@ -1,7 +1,3 @@
-function move(direction) {
-    switch direction
-}
-
 Template.body.events({
     "input #prompt": function(event) {
         var value = event.target.value;
