@@ -26,6 +26,25 @@ Meteor.methods({
             Rooms.update(toRoomId, {$set: {players: toRoom.players.concat(playerName)}});
         }
     },
+
+    showPlayer: function(playerId, message) {
+        Messages.insert({ playerId: playerId, type: "show", message: message });
+    },
+
+    showRoom: function(roomId, message) {
+        var room = Rooms.findOne(roomId);
+        if (_.isObject(room)) {
+            _.each(room.players, function(player) {
+                Messages.insert({
+                    playerId: Meteor.users.findOne({username: player})._id,
+                    type: "show",
+                    message: message
+                });
+            });
+        } else {
+            alert('show room error: Unknown id: ' + id);
+        }
+    },
     
     say: function(roomId, message) {
         var room = Rooms.findOne(roomId);
@@ -112,6 +131,23 @@ Meteor.methods({
                 Rooms.update(room._id, { $set: {players: _.without(room.players, playerName)} });
             }
         });
+    },
+
+    addRoom: function(from, direction, name) {
+        console.log("Adding room " + direction + " of '" + from.name + "' called '" + name + "'.");
+
+        var newRoom = {
+            name: name,
+            desc: "A brand new room. Use the edit command to change the description.",
+            players: []
+        };
+        newRoom[reverseDir(direction)] = from._id;
+
+        var roomId = Rooms.insert(newRoom);
+
+        var update = { $set: {} };
+        update.$set[direction] = roomId;
+        Rooms.update(from._id, update);
     }
     
 });
