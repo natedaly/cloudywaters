@@ -1,0 +1,13 @@
+<template name="messageBox">
+  <div id="messages">
+    {{#each messages}}
+      {{> message}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="message">
+  <div>
+    <span class="msg {{type}}">{{message}}</span>
+  </div>
+</template>

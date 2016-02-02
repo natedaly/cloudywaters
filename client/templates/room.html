@@ -1,0 +1,20 @@
+<template name="room">
+  <div class="room">
+    <div class="roomName">
+      {{name}}
+    </div>
+    <div class="roomDesc">
+      {{desc}}
+    </div>
+    <div class="mobList">
+      {{#each mobList}}
+        <div>{{this.name}} is standing here.</div>
+      {{/each}}
+    </div>
+    <div class="playerList">
+      {{#each playerList}}
+        <div>{{this}} is standing here.</div>
+      {{/each}}
+    </div>
+  </div>
+</template>
