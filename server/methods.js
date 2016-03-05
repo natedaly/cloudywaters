@@ -134,7 +134,7 @@ Meteor.methods({
     },
 
     addRoom: function(from, direction, name) {
-        console.log("Adding room " + direction + " of '" + from.name + "' called '" + name + "'.");
+        console. log("Adding room " + direction + " of '" + from.name + "' called '" + name + "'.");
 
         var newRoom = {
             name: name,
@@ -148,6 +148,10 @@ Meteor.methods({
         var update = { $set: {} };
         update.$set[direction] = roomId;
         Rooms.update(from._id, update);
+    },
+
+    editRoom: function(roomId, update) {
+        Rooms.update(roomId, {$set: update});
     }
     
 });

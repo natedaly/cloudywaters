@@ -17,12 +17,3 @@ Meteor.logout = function customLogout() {
     Session.clear();
     _logout.apply(Meteor, arguments);
 };
-
-/*
-Accounts.onCreateUser(function(options, user) {
-    var currentRoom = Rooms.findOne({name: "Market Square"});
-    Meteor.call("addPlayerToRoom", currentRoom._id);
-    Session.setPersistent("currentRoomId", currentRoom._id);
-    return user;
-});
-*/

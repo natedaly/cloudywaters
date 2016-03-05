@@ -74,6 +74,7 @@ twbs:bootstrap@3.3.6
 u2622:persistent-session@0.4.4
 ui@1.0.8
 underscore@1.0.4
+underscorestring:underscore.string@3.3.4
 url@1.0.5
 webapp@1.2.3
 webapp-hashing@1.0.5

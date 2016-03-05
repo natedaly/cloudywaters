@@ -1,0 +1,59 @@
+#+OPTIONS: ^:nil \n:t num:nil toc:nil H:0
+#+STARTUP: indent nologdone
+#+TITLE: Cloudy Waters Project File
+
+The MUD with a clean, clear interface
+
+Less reading. Less typing. More playing.
+
+* Project Vision
+
+* World Description
+** Solace City
+You start out in Solace City, the capitol of the Kingdom of Solace.
+
+Located on an island in the North Sea.
+Home of:
+- The Temple of Solace
+- The Congress of Solace
+- The Guilds of Solace
+- The Solace Market
+- The Outskirts of Solace
+- The Battleground of Solace
+- The Old Solace Inn
+- The Bank of Solace
+- The Solace City Zoo
+- The Training Arena of Solace
+- The Solace City Hospital
+
+
+** Kingdom of Solace
+Once ruled by the late King Thaniel and Queen Bella, the Kingdom of Solace is
+a lawful land and a safe haven to travelers of all races and beliefs. It is
+governed by the Knights of Solace, a cadre of elite Men in Service entrusted
+with carrying on the vision of Thaniel and Bella. At its heart, through not
+its center, is the capitol, Solace City.
+
+
+
+** Classes
+*** Warriors
+*** Clerics
+*** Mages
+*** Thieves
+*** Druids
+*** Rangers
+*** Paladins
+*** Antipaladins
+*** Shadowmages
+** Races
+** Levels
+1-100
+** Rules
+No player killing.
+No stealing.
+** Commands
+say
+kill
+edit
+

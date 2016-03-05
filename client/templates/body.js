@@ -20,19 +20,21 @@ Template.body.helpers({
 
 Template.body.created = function() {
     // Make sure the input prompt has the focus to begin with.
-    setTimeout(1000, function () {
-        $('#prompt input[name=command]').focus();
-    });
+    setTimeout(function () { $('#prompt input[name=command]').focus(); }, 1000);
 
     // Automatically move the focus to the command prompt if the user types
     // something when it's not in focus. Typing anywhere on the screen should
-    // always be sent to the command prompt.
+    // always be sent to the command prompt, unless there is a modal dialog
+    // open.
     $(document).keydown(function(event) {
         var prompt = $('#prompt input');
-        if (! $(event.target).is(prompt)) {
+
+        if (! $(event.target).is(prompt) && ! $('body').hasClass('vex-open')) {
             prompt.focus();
             prompt.trigger('keydown', { which: event.keyCode });
         }
+
+        return true;
     });
 };
 
@@ -44,6 +46,8 @@ Template.body.events({
             event.target.value = "";
             Command.run(cmd);
         }
+
+        return false;
     },
 
     "submit #prompt": function(event) {
@@ -51,6 +55,12 @@ Template.body.events({
         event.target.command.value = '';
         Command.run(_.first(input), _.rest(input));
         return false;
+    },
+
+    'click #logout': function(event) {
+        Session.set('playerName', undefined);
+        Accounts.logout();
+        Command.run('playerLogout');
     },
 
     'click #repop': function(event) {

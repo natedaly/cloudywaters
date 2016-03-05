@@ -1,0 +1,10 @@
+<template name="login">
+  <h1 id="loginTitle">Cloudy Waters</h1>
+  <form id="loginForm">
+    {{#if playerName}}
+      <input id="playerPass" name="playerpass" type="password" placeholder="Enter your password, {{playerName}}" autocomplete="off" autofocus>
+    {{else}}
+      <input id="playerName" name="playername" type="text" placeholder="Enter thy name, and let the adventures begin..." autocomplete="off" autofocus>
+    {{/if}}
+  </form>
+</template>
