@@ -9,7 +9,7 @@ Tracker.autorun(function () {
 Tracker.autorun(function () {
   Meteor.subscribe('rooms', function () {
     if (! Session.get('currentRoomId')) {
-      var currentRoom = Rooms.findOne({ name: 'Market Square' });
+      var currentRoom = Rooms.findOne({ name: 'Solace Market Square' });
       Meteor.call('addPlayerToRoom', currentRoom._id);
       Session.setPersistent('currentRoomId', currentRoom._id);
     }
