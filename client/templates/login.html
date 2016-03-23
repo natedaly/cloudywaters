@@ -1,10 +1,14 @@
 <template name="login">
-  <h1 id="loginTitle">Cloudy Waters</h1>
-  <form id="loginForm">
-    {{#if playerName}}
-      <input id="playerPass" name="playerpass" type="password" placeholder="Enter your password, {{playerName}}" autocomplete="off" autofocus>
-    {{else}}
-      <input id="playerName" name="playername" type="text" placeholder="By what name do you wish to be known?" autocomplete="off" autofocus>
-    {{/if}}
+  <form id="login-form">
+    <h1 id="login-title">Cloudy Waters</h1>
+    <input id="player-name" name="player-name" type="text"
+           placeholder="By what name do you wish to be known?"
+           autocomplete="off" autofocus>
+    <input id="player-pass" class="hidden" name="player-pass" type="password"
+           placeholder="Enter your password, {{playerName}}"
+           autocomplete="off" autofocus>
+    <input id="player-confirm-new" class="hidden" name="player-confirm-new"
+           type="text" placeholder="Did I get that right, {{playerName}} (Y/N)?"
+           autocomplete="off" autofocus>
   </form>
 </template>

@@ -1,21 +1,15 @@
-Template.login.helpers({
-  playerName: function () {
-    return Session.get('playerName');
-  }
-});
-
-Template.login.created = function () {
+Template.login.rendered = function () {
   // Make sure the first (only visible) input has the focus to begin with.
   $(document).ready(function () {
     setTimeout(function () {
-      $('#loginForm input:eq(0)').focus();
+      $('#login-form input:eq(0)').focus();
     }, 1000);
   });
 
   // Automatically move the focus to the first input in the login form if
   // the user types something when it's not in focus.
   $(document).keydown(function (event) {
-    var input = $('#loginForm input:eq(0)');
+    var input = $('#login-form input:eq(0)');
 
     if (! $(event.target).is(input) && ! $('body').hasClass('vex-open')) {
       input.focus();
@@ -26,36 +20,64 @@ Template.login.created = function () {
   });
 };
 
+Template.login.helpers({
+  playerName() {
+    return Session.get('playerName');
+  }
+});
+
 Template.login.events({
-  'keydown #playerName': function (event) {
+  'keydown #player-name': function (event) {
     if (event.which === 13) { // Enter key
-      event.preventDefault();
-      var playerName = $(event.target).val();
-      if (playerName.length > 0) {
-        Session.set('playerName', s.capitalize(playerName, true));
-        setTimeout(function () {
-          $('#playerPass').focus();
-        }, 0);
+      const $target = $(event.target);
+      const playerName = $target.val();
+
+      if (playerName.length === 0) return;
+
+      Session.set('playerName', s.capitalize(playerName));
+      $target.addClass('hidden');
+
+      // If the player exists, ask for a password, otherwise confirm
+      // whether this is a new player or not.
+      if (Meteor.users.findOne({ username: playerName })) {
+        $('#player-pass').removeClass('hidden').focus();
+      } else {
+        $('#player-confirm-new').removeClass('hidden').focus();
       }
     }
   },
 
-  'keydown #playerPass': function (event) {
+  'keydown #player-pass': function (event) {
     if (event.which === 13) { // Enter key
-      event.preventDefault();
       // Log them in.
       Meteor.loginWithPassword(Session.get('playerName'),
-                               $('#playerPass').val(),
+                               $(event.target).val(),
                                function (err) {
                                  if (err) {
                                    // The user might not have been found,
-                                   // or their passwword could be
+                                   // or their password could be
                                    // incorrect. Inform the user that
                                    // their login attempt has failed.
                                  } else {
                                    // The user has been logged in.
                                  }
                                });
+    }
+  },
+
+  'keydown #player-confirm-new': function (event) {
+    const yesKeys = [13, 89];   // 'Enter', 'y'
+    const noKeys = [8, 27, 78]; // 'Backspace', 'Escape', 'n'
+
+    if (_.contains(yesKeys, event.which)) {
+      event.preventDefault();
+      Session.set('newPlayer', true);
+    } else if (_.contains(noKeys, event.which)) {
+      event.preventDefault();
+      Session.clear();
+      $('#login-form').trigger('reset');
+      $(event.target).addClass('hidden');
+      $('#player-name').removeClass('hidden').focus();
     }
   }
 });

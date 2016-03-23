@@ -73,11 +73,11 @@
   </div>
 
 {{else}}
-
-  <div id="login">
+  {{#if isNewPlayer}}
+    {{> newPlayer}}
+  {{else}}
     {{> login}}
-  </div>
-
+  {{/if}}
 {{/if}}
 
 </body>

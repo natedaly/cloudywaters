@@ -1,24 +1,30 @@
 Template.body.helpers({
-  currentRoom: getCurrentRoom,
+  isNewPlayer() {
+    return Session.get('newPlayer');
+  },
 
-  northRoom: function () {
+  currentRoom() {
+    return getCurrentRoom();
+  },
+
+  northRoom() {
     return getAdjacentRoom('north');
   },
 
-  southRoom: function () {
+  southRoom() {
     return getAdjacentRoom('south');
   },
 
-  eastRoom: function () {
+  eastRoom() {
     return getAdjacentRoom('east');
   },
 
-  westRoom: function () {
+  westRoom() {
     return getAdjacentRoom('west');
   }
 });
 
-Template.body.created = function () {
+Template.body.rendered = function () {
   // Make sure the input prompt has the focus to begin with.
   setTimeout(function () { $('#prompt input[name=command]').focus(); }, 1000);
 
